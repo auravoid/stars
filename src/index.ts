@@ -17,17 +17,7 @@ export default {
 		  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffe234" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 			<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
 		  </svg>
-		  `,
-		  half: `
-		  <svg xmlns="http://www.w3.org/2000/svg" fill="#ffe234" stroke="#ffe234" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<defs>
-			<linearGradient id="half-fill" x1="0%" y1="0%" x2="100%" y2="0%">
-				<stop offset="50%" style="stop-color:#ffe234; stop-opacity:1" />
-				<stop offset="50%" style="stop-color:#ffe234; stop-opacity:0" />
-			</linearGradient>
-			</defs>
-			<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#half-fill)"/>
-		  </svg>`
+		  `
 	  }
   
 	  if (starCount === null || starCount === undefined) {
@@ -48,7 +38,7 @@ export default {
   
 	  
 	  const fullStars = Math.floor(starCount);
-	  const halfStars = Math.floor(starCount % 1);
+	  const semiStars = Math.floor(starCount % 1);
 	  const totalWidth = starAmount * 24;
   
   let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="24">`;
@@ -56,10 +46,20 @@ export default {
 		svg += `<g transform="translate(${i * 24},0)">${star.full}</g>`;
 	  }
 	  if (starCount % 1 !== 0) {
-		  svg += `<g transform="translate(${fullStars * 24},0)">${star.half}</g>`;
+		  svg += `<g transform="translate(${fullStars * 24},0)">
+		  <svg xmlns="http://www.w3.org/2000/svg" fill="#ffe234" stroke="#ffe234" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<defs>
+			<linearGradient id="semi-fill" x1="0%" y1="0%" x2="100%" y2="0%">
+				<stop offset="${starCount % 1}" style="stop-color:#ffe234; stop-opacity:1" />
+				<stop offset="${starCount % 1}" style="stop-color:#ffe234; stop-opacity:0" />
+			</linearGradient>
+			</defs>
+			<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#semi-fill)"/>
+		  </svg>
+		  </g>`;
 	  }
-	  for (let i = 0; i < starAmount - fullStars - halfStars; i++) {
-		svg += `<g transform="translate(${(fullStars + halfStars + i) * 24},0)">${star.empty}</g>`;
+	  for (let i = 0; i < starAmount - fullStars - semiStars; i++) {
+		svg += `<g transform="translate(${(fullStars + semiStars + i) * 24},0)">${star.empty}</g>`;
 	  }
 	  svg += `</svg>`;
   
